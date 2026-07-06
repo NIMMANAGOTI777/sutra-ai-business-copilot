@@ -178,3 +178,32 @@ select
 where not exists (
   select 1 from public.team_members where full_name = 'Karthik Nimmanagoti'
 );
+
+-- Seed Team Members Data (Y Ahladini Sindhu Sri)
+insert into public.team_members (
+  full_name, 
+  role, 
+  bio, 
+  quote, 
+  avatar_url, 
+  responsibilities, 
+  skills, 
+  socials, 
+  is_featured, 
+  display_order
+)
+select 
+  'Y Ahladini Sindhu Sri',
+  'R&D Lead & AI Engineer',
+  'Y Ahladini Sindhu Sri is an R&D Lead specializing in artificial intelligence, machine learning, and natural language processing. She drives research and development initiatives at Sutra, designing advanced algorithms and intelligent pipelines that empower local businesses with state-of-the-art automation.',
+  'Driving innovation by translating cutting-edge AI research into real-world business value.',
+  'https://res.cloudinary.com/do4nuj2kh/image/upload/v1783339293/WhatsApp_Image_2026-07-06_at_5.30.28_PM_zfsz9i.jpg',
+  array['AI Research & Innovation', 'Algorithm Design & Tuning', 'NLP & Large Language Models', 'Data Pipeline Architecture', 'Predictive Modeling', 'Performance Optimization', 'System Integration'],
+  array['Python', 'Machine Learning', 'Deep Learning', 'Natural Language Processing', 'Large Language Models (LLMs)', 'Data Analytics', 'API Development', 'TensorFlow / PyTorch'],
+  '{"linkedin": "https://www.linkedin.com/in/ahladinisindhusriyenumula", "email": "mailto:ahladini@sutra.ai"}'::jsonb,
+  false,
+  1
+where not exists (
+  select 1 from public.team_members where full_name = 'Y Ahladini Sindhu Sri'
+);
+

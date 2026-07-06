@@ -30,37 +30,60 @@ const InstagramIcon = ({ size = 14 }) => (
   </svg>
 );
 
+// Fallback seed team data to guarantee render even without database tables initialized
+const fallbackTeam = [
+  {
+    id: 'karthik-founder',
+    full_name: 'Karthik Nimmanagoti',
+    role: 'Founder & Product Manager',
+    bio: 'Karthik Nimmanagoti is the creator of Sutra, an AI-powered Business Copilot designed to help local businesses manage customer interactions from a single intelligent workspace. His vision is to reduce operational complexity by combining AI, automation, and modern product design into one seamless experience.',
+    quote: 'Building AI products that make business simpler, smarter, and more human.',
+    avatar_url: 'https://res.cloudinary.com/do4nuj2kh/image/upload/v1783330744/WhatsApp_Image_2026-07-01_at_7.32.30_PM_vbhtly.jpg',
+    responsibilities: [
+      'Product Strategy', 'Product Management', 'UI/UX Design', 
+      'AI Experience Design', 'Frontend Development', 'Brand Identity', 'System Architecture'
+    ],
+    skills: [
+      'Product Management', 'UI/UX Design', 'React', 
+      'Supabase', 'AI Products', 'Branding', 'Marketing Strategy'
+    ],
+    socials: {
+      linkedin: 'https://www.linkedin.com/in/karthik-nimmanagoti-52a403324',
+      github: 'https://github.com/NIMMANAGOTI777',
+      instagram: 'https://www.instagram.com/nimmanagoti.karthik/',
+      email: 'mailto:karthik@sutra.ai'
+    },
+    is_featured: true
+  },
+  {
+    id: 'ahladini-rd',
+    full_name: 'Y Ahladini Sindhu Sri',
+    role: 'R&D Lead & AI Engineer',
+    bio: 'Y Ahladini Sindhu Sri is an R&D Lead specializing in artificial intelligence, machine learning, and natural language processing. She drives research and development initiatives at Sutra, designing advanced algorithms and intelligent pipelines that empower local businesses with state-of-the-art automation.',
+    quote: 'Driving innovation by translating cutting-edge AI research into real-world business value.',
+    avatar_url: 'https://res.cloudinary.com/do4nuj2kh/image/upload/v1783339293/WhatsApp_Image_2026-07-06_at_5.30.28_PM_zfsz9i.jpg',
+    responsibilities: [
+      'AI Research & Innovation', 'Algorithm Design & Tuning', 'NLP & Large Language Models', 
+      'Data Pipeline Architecture', 'Predictive Modeling', 'Performance Optimization', 'System Integration'
+    ],
+    skills: [
+      'Python', 'Machine Learning', 'Deep Learning', 
+      'Natural Language Processing', 'Large Language Models (LLMs)', 'Data Analytics', 'API Development', 'TensorFlow / PyTorch'
+    ],
+    socials: {
+      linkedin: 'https://www.linkedin.com/in/ahladinisindhusriyenumula',
+      email: 'mailto:ahladini@sutra.ai'
+    },
+    is_featured: false
+  }
+];
+
 export default function TeamView({ standalone = false }) {
   const { setIsLandingPage, setActiveTab } = useApp();
   const [team, setTeam] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Fallback seed team data to guarantee render even without database tables initialized
-  const fallbackTeam = [
-    {
-      id: 'karthik-founder',
-      full_name: 'Karthik Nimmanagoti',
-      role: 'Founder & Product Manager',
-      bio: 'Karthik Nimmanagoti is a Product Manager, designer, and AI enthusiast passionate about building intelligent software that helps businesses work smarter. Sutra was created to simplify how local businesses manage customer relationships using AI.',
-      quote: 'Building AI products that make business simpler, smarter, and more human.',
-      avatar_url: 'https://res.cloudinary.com/do4nuj2kh/image/upload/v1783330744/WhatsApp_Image_2026-07-01_at_7.32.30_PM_vbhtly.jpg',
-      responsibilities: [
-        'Product Strategy', 'Product Management', 'UI/UX Design', 
-        'AI Experience Design', 'Frontend Development', 'Brand Identity', 'System Architecture'
-      ],
-      skills: [
-        'Product Management', 'UI/UX Design', 'React', 
-        'Supabase', 'AI Products', 'Branding', 'Marketing Strategy'
-      ],
-      socials: {
-        linkedin: 'https://www.linkedin.com/in/karthik-nimmanagoti-52a403324',
-        github: 'https://github.com/NIMMANAGOTI777',
-        instagram: 'https://www.instagram.com/nimmanagoti.karthik/',
-        email: 'mailto:karthik@sutra.ai'
-      },
-      is_featured: true
-    }
-  ];
+  const [activeMemberId, setActiveMemberId] = useState(null);
+  const [hoveredMemberId, setHoveredMemberId] = useState(null);
 
   useEffect(() => {
     async function fetchTeam() {
@@ -73,12 +96,16 @@ export default function TeamView({ standalone = false }) {
         if (error) throw error;
         if (data && data.length > 0) {
           setTeam(data);
+          const featured = data.find(m => m.is_featured) || data[0];
+          setActiveMemberId(featured.id);
         } else {
           setTeam(fallbackTeam);
+          setActiveMemberId(fallbackTeam[0].id);
         }
       } catch (err) {
         console.warn('Failed to load team_members from Supabase, using local fallback:', err);
         setTeam(fallbackTeam);
+        setActiveMemberId(fallbackTeam[0].id);
       } finally {
         setLoading(false);
       }
@@ -94,6 +121,7 @@ export default function TeamView({ standalone = false }) {
     }
   };
 
+  const activeMember = team.find(m => m.id === activeMemberId) || team.find(m => m.is_featured) || team[0] || fallbackTeam[0];
   const founder = team.find(m => m.is_featured) || fallbackTeam[0];
 
   return (
@@ -181,15 +209,15 @@ export default function TeamView({ standalone = false }) {
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '2rem' }}>
             
-            {/* COLUMN 1: Founder details */}
+            {/* COLUMN 1: Active Member details */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
               
-              {/* Premium Founder Card */}
+              {/* Premium Profile Card */}
               <div className="glass-card pulse-glow-purple" style={{
                 position: 'relative',
                 padding: '2.5rem',
                 backgroundColor: 'rgba(9, 9, 11, 0.7)',
-                borderColor: 'rgba(108, 76, 241, 0.3)',
+                borderColor: activeMember.is_featured ? 'rgba(108, 76, 241, 0.3)' : 'rgba(16, 185, 129, 0.3)',
                 borderRadius: '16px',
                 overflow: 'hidden',
                 display: 'flex',
@@ -203,7 +231,9 @@ export default function TeamView({ standalone = false }) {
                   right: '-50px',
                   width: '150px',
                   height: '150px',
-                  background: 'radial-gradient(circle, rgba(108, 76, 241, 0.15), transparent 70%)',
+                  background: activeMember.is_featured 
+                    ? 'radial-gradient(circle, rgba(108, 76, 241, 0.15), transparent 70%)'
+                    : 'radial-gradient(circle, rgba(16, 185, 129, 0.15), transparent 70%)',
                   pointerEvents: 'none'
                 }} />
 
@@ -215,13 +245,15 @@ export default function TeamView({ standalone = false }) {
                   height: '120px',
                   borderRadius: '16px',
                   padding: '3px',
-                  background: 'linear-gradient(135deg, var(--color-purple), #a78bfa, #60a5fa)',
+                  background: activeMember.is_featured
+                    ? 'linear-gradient(135deg, var(--color-purple), #a78bfa, #60a5fa)'
+                    : 'linear-gradient(135deg, var(--color-emerald), #34d399, #60a5fa)',
                   boxShadow: 'var(--shadow-lg)',
                   transition: 'transform 0.3s ease'
                 }} className="hover-scale">
                   <img 
-                    src={founder.avatar_url} 
-                    alt={founder.full_name} 
+                    src={activeMember.avatar_url} 
+                    alt={activeMember.full_name} 
                     style={{
                       width: '100%',
                       height: '100%',
@@ -242,22 +274,22 @@ export default function TeamView({ standalone = false }) {
                     gap: '4px',
                     padding: '3px 10px',
                     borderRadius: '9999px',
-                    backgroundColor: 'rgba(108, 76, 241, 0.15)',
-                    border: '1px solid rgba(108, 76, 241, 0.3)',
-                    color: '#C084FC',
+                    backgroundColor: activeMember.is_featured ? 'rgba(108, 76, 241, 0.15)' : 'rgba(16, 185, 129, 0.15)',
+                    border: activeMember.is_featured ? '1px solid rgba(108, 76, 241, 0.3)' : '1px solid rgba(16, 185, 129, 0.3)',
+                    color: activeMember.is_featured ? '#C084FC' : '#34D399',
                     fontSize: '0.6875rem',
                     fontWeight: 700,
                     textTransform: 'uppercase',
                     letterSpacing: '0.05em'
                   }}>
-                    <Award size={10} /> Featured Founder
+                    <Award size={10} /> {activeMember.is_featured ? 'Featured Founder' : 'Core R&D'}
                   </div>
 
                   <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'white', margin: 0, letterSpacing: '-0.02em' }}>
-                    {founder.full_name}
+                    {activeMember.full_name}
                   </h2>
                   <span style={{ fontSize: '0.9375rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
-                    {founder.role}
+                    {activeMember.role}
                   </span>
 
                   {/* Quote */}
@@ -265,12 +297,12 @@ export default function TeamView({ standalone = false }) {
                     fontSize: '0.875rem',
                     color: '#cbd5e1',
                     fontStyle: 'italic',
-                    borderLeft: '2.5px solid var(--color-purple)',
+                    borderLeft: activeMember.is_featured ? '2.5px solid var(--color-purple)' : '2.5px solid var(--color-emerald)',
                     paddingLeft: '12px',
                     margin: '6px 0 0',
                     lineHeight: '1.4'
                   }}>
-                    "{founder.quote}"
+                    "{activeMember.quote}"
                   </p>
                 </div>
               </div>
@@ -279,10 +311,10 @@ export default function TeamView({ standalone = false }) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 <div>
                   <h3 style={{ fontSize: '1.125rem', fontWeight: 700, borderBottom: '1px solid var(--border-color)', paddingBottom: '8px', marginBottom: '10px' }}>
-                    About the Founder
+                    About {activeMember.full_name}
                   </h3>
                   <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
-                    Karthik Nimmanagoti is the creator of Sutra, an AI-powered Business Copilot designed to help local businesses manage customer interactions from a single intelligent workspace. His vision is to reduce operational complexity by combining AI, automation, and modern product design into one seamless experience.
+                    {activeMember.bio}
                   </p>
                 </div>
 
@@ -292,7 +324,7 @@ export default function TeamView({ standalone = false }) {
                     Responsibilities
                   </h3>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {founder.responsibilities?.map((item) => (
+                    {activeMember.responsibilities?.map((item) => (
                       <span key={item} style={{
                         padding: '4px 10px',
                         borderRadius: '6px',
@@ -313,14 +345,14 @@ export default function TeamView({ standalone = false }) {
                     Skills
                   </h3>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {founder.skills?.map((item) => (
+                    {activeMember.skills?.map((item) => (
                       <span key={item} style={{
                         padding: '4px 10px',
                         borderRadius: '6px',
-                        backgroundColor: 'rgba(108, 76, 241, 0.03)',
-                        border: '1px solid rgba(108, 76, 241, 0.12)',
+                        backgroundColor: activeMember.is_featured ? 'rgba(108, 76, 241, 0.03)' : 'rgba(16, 185, 129, 0.03)',
+                        border: activeMember.is_featured ? '1px solid rgba(108, 76, 241, 0.12)' : '1px solid rgba(16, 185, 129, 0.12)',
                         fontSize: '0.75rem',
-                        color: '#A78BFA'
+                        color: activeMember.is_featured ? '#A78BFA' : '#34D399'
                       }}>
                         {item}
                       </span>
@@ -328,34 +360,34 @@ export default function TeamView({ standalone = false }) {
                   </div>
                 </div>
 
-                {/* Social Channels placeholders */}
+                {/* Social Channels */}
                 <div>
                   <h3 style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Connect & Socials
                   </h3>
                   <div style={{ display: 'flex', gap: '10px' }}>
-                    {founder.socials?.linkedin && (
-                      <a href={founder.socials.linkedin} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', borderRadius: '8px', padding: '6px 12px' }}>
+                    {activeMember.socials?.linkedin && (
+                      <a href={activeMember.socials.linkedin} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', borderRadius: '8px', padding: '6px 12px' }}>
                         <LinkedInIcon size={12} /> LinkedIn
                       </a>
                     )}
-                    {founder.socials?.instagram && (
-                      <a href={founder.socials.instagram} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', borderRadius: '8px', padding: '6px 12px' }}>
+                    {activeMember.socials?.instagram && (
+                      <a href={activeMember.socials.instagram} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', borderRadius: '8px', padding: '6px 12px' }}>
                         <InstagramIcon size={12} /> Instagram
                       </a>
                     )}
-                    {founder.socials?.github && (
-                      <a href={founder.socials.github} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', borderRadius: '8px', padding: '6px 12px' }}>
+                    {activeMember.socials?.github && (
+                      <a href={activeMember.socials.github} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', borderRadius: '8px', padding: '6px 12px' }}>
                         <GitHubIcon size={12} /> GitHub
                       </a>
                     )}
-                    {founder.socials?.portfolio && (
-                      <a href={founder.socials.portfolio} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', borderRadius: '8px', padding: '6px 12px' }}>
+                    {activeMember.socials?.portfolio && (
+                      <a href={activeMember.socials.portfolio} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', borderRadius: '8px', padding: '6px 12px' }}>
                         <ExternalLink size={12} /> Portfolio
                       </a>
                     )}
-                    {founder.socials?.email && (
-                      <a href={founder.socials.email} className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', borderRadius: '8px', padding: '6px 12px' }}>
+                    {activeMember.socials?.email && (
+                      <a href={activeMember.socials.email} className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', borderRadius: '8px', padding: '6px 12px' }}>
                         <Mail size={12} /> Email
                       </a>
                     )}
@@ -366,9 +398,92 @@ export default function TeamView({ standalone = false }) {
 
             </div>
 
-            {/* COLUMN 2: Team Statistics Card */}
+            {/* COLUMN 2: Directory & Team Statistics */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               
+              {/* Team Directory Card */}
+              <div className="glass-card" style={{
+                backgroundColor: 'rgba(9, 9, 11, 0.4)',
+                padding: '1.5rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem'
+              }}>
+                <h4 style={{ fontSize: '0.875rem', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
+                  Team Directory
+                </h4>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {team.map((member) => {
+                    const isActive = member.id === activeMember.id;
+                    const isHovered = hoveredMemberId === member.id;
+                    return (
+                      <div 
+                        key={member.id}
+                        onClick={() => setActiveMemberId(member.id)}
+                        onMouseEnter={() => setHoveredMemberId(member.id)}
+                        onMouseLeave={() => setHoveredMemberId(null)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '12px',
+                          padding: '10px',
+                          borderRadius: '10px',
+                          backgroundColor: isActive 
+                            ? 'rgba(108, 76, 241, 0.08)' 
+                            : (isHovered ? 'rgba(255, 255, 255, 0.03)' : 'transparent'),
+                          border: isActive 
+                            ? '1px solid rgba(108, 76, 241, 0.3)' 
+                            : '1px solid transparent',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          userSelect: 'none'
+                        }}
+                      >
+                        <div style={{
+                          width: '40px',
+                          height: '40px',
+                          borderRadius: '8px',
+                          overflow: 'hidden',
+                          border: isActive 
+                            ? '2px solid var(--color-purple)' 
+                            : '1px solid var(--border-color)',
+                          flexShrink: 0
+                        }}>
+                          <img 
+                            src={member.avatar_url} 
+                            alt={member.full_name} 
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          />
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                          <span style={{ 
+                            fontSize: '0.8125rem', 
+                            fontWeight: 600, 
+                            color: isActive ? 'white' : 'var(--text-primary)',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                          }}>
+                            {member.full_name}
+                          </span>
+                          <span style={{ 
+                            fontSize: '0.72rem', 
+                            color: 'var(--text-secondary)',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                          }}>
+                            {member.role}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Team Statistics Card */}
               <div className="glass-card" style={{
                 backgroundColor: 'rgba(9, 9, 11, 0.4)',
                 padding: '1.5rem',
