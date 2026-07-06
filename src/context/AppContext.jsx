@@ -10,6 +10,8 @@ export function AppProvider({ children }) {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [profileLoading, setProfileLoading] = useState(true);
+  const [workspace, setWorkspace] = useState(null);
+  const [demoMode, setDemoMode] = useState(true);
   const [currentBusinessId, setCurrentBusinessId] = useState('cafe');
   const [activeTab, setActiveTab] = useState('dashboard');
   const [businessData, setBusinessData] = useState(MOCK_DATA);
@@ -112,9 +114,49 @@ export function AppProvider({ children }) {
 
   const logout = async () => {
     setProfile(null);
+    setWorkspace(null);
     setProfileLoading(true);
-    await supabase.auth.signOut();
+    setUser(null);
+    try {
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.warn('Supabase signOut warning:', err);
+    }
     addNotification('Signed out from workspace session', 'system');
+  };
+
+  const loginAsDemo = () => {
+    const mockUser = {
+      id: 'demo-user',
+      email: 'demo@sutra.ai',
+      phone: '+919999999999',
+      user_metadata: { name: 'Rahul', full_name: 'Rahul' },
+      app_metadata: { provider: 'demo' }
+    };
+    const mockProfile = {
+      id: 'demo-user',
+      full_name: 'Rahul',
+      email: 'demo@sutra.ai',
+      phone_number: '+919999999999',
+      profile_photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120',
+      login_provider: 'demo',
+      business_name: 'The Daily Grind Cafe',
+      onboarded: true
+    };
+    const mockWorkspace = {
+      id: 'demo-workspace-id',
+      owner_id: 'demo-user',
+      business_name: 'The Daily Grind Cafe',
+      business_category: 'Cafe',
+      setup_completed: true
+    };
+    
+    setUser(mockUser);
+    setProfile(mockProfile);
+    setWorkspace(mockWorkspace);
+    setProfileLoading(false);
+    setIsLandingPage(false);
+    addNotification('Logged in with Demo Account (Sandbox)', 'success');
   };
 
   // Toggle Theme helper
@@ -375,7 +417,12 @@ export function AppProvider({ children }) {
       profile,
       setProfile,
       profileLoading,
+      workspace,
+      setWorkspace,
       logout,
+      loginAsDemo,
+      demoMode,
+      setDemoMode,
       currentBusinessId,
       selectBusiness,
       activeBusiness,

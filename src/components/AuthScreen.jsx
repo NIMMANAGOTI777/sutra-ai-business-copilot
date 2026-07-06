@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabaseClient';
 import { Sparkles, ShieldAlert, ArrowLeft, RefreshCw, Smartphone } from 'lucide-react';
 
 export default function AuthScreen() {
-  const { setIsLandingPage, addNotification } = useApp();
+  const { setIsLandingPage, addNotification, loginAsDemo } = useApp();
   
   const [authMethod, setAuthMethod] = useState('google'); // google, phone
   const [phone, setPhone] = useState('');
@@ -393,6 +393,37 @@ export default function AuthScreen() {
               )}
             </div>
           )}
+
+          {/* Guest / Demo Bypass Button */}
+          <div style={{
+            marginTop: '1.5rem',
+            paddingTop: '1.25rem',
+            borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+            textAlign: 'center'
+          }}>
+            <button
+              onClick={loginAsDemo}
+              style={{
+                background: 'linear-gradient(135deg, rgba(108, 76, 241, 0.1), rgba(96, 165, 250, 0.1))',
+                border: '1px solid rgba(108, 76, 241, 0.3)',
+                color: '#A78BFA',
+                padding: '10px 16px',
+                borderRadius: '10px',
+                fontSize: '0.8125rem',
+                fontWeight: 600,
+                width: '100%',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                transition: 'all 0.2s'
+              }}
+              className="hover-scale"
+            >
+              <Sparkles size={14} /> Continue with Demo Account (Sandbox)
+            </button>
+          </div>
         </div>
       </div>
     </div>
