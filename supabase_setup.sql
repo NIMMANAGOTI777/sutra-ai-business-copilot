@@ -169,10 +169,10 @@ select
   'Founder & Product Manager',
   'Karthik Nimmanagoti is a Product Manager, designer, and AI enthusiast passionate about building intelligent software that helps businesses work smarter. Sutra was created to simplify how local businesses manage customer relationships using AI.',
   'Building AI products that make business simpler, smarter, and more human.',
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120',
+  'https://res.cloudinary.com/do4nuj2kh/image/upload/v1783330744/WhatsApp_Image_2026-07-01_at_7.32.30_PM_vbhtly.jpg',
   array['Product Strategy', 'Product Management', 'UI/UX Design', 'AI Experience Design', 'Frontend Development', 'Brand Identity', 'System Architecture'],
   array['Product Management', 'UI/UX Design', 'React', 'Supabase', 'AI Products', 'Branding', 'Marketing Strategy'],
-  '{"linkedin": "https://linkedin.com", "github": "https://github.com", "portfolio": "https://portfolio.com", "email": "mailto:karthik@sutra.ai"}'::jsonb,
+  '{"linkedin": "https://www.linkedin.com/in/karthik-nimmanagoti-52a403324", "github": "https://github.com/NIMMANAGOTI777", "instagram": "https://www.instagram.com/nimmanagoti.karthik/", "email": "mailto:karthik@sutra.ai"}'::jsonb,
   true,
   0
 where not exists (

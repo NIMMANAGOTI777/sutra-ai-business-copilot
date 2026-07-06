@@ -22,6 +22,14 @@ const GitHubIcon = ({ size = 14 }) => (
   </svg>
 );
 
+const InstagramIcon = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+  </svg>
+);
+
 export default function TeamView({ standalone = false }) {
   const { setIsLandingPage, setActiveTab } = useApp();
   const [team, setTeam] = useState([]);
@@ -35,7 +43,7 @@ export default function TeamView({ standalone = false }) {
       role: 'Founder & Product Manager',
       bio: 'Karthik Nimmanagoti is a Product Manager, designer, and AI enthusiast passionate about building intelligent software that helps businesses work smarter. Sutra was created to simplify how local businesses manage customer relationships using AI.',
       quote: 'Building AI products that make business simpler, smarter, and more human.',
-      avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120',
+      avatar_url: 'https://res.cloudinary.com/do4nuj2kh/image/upload/v1783330744/WhatsApp_Image_2026-07-01_at_7.32.30_PM_vbhtly.jpg',
       responsibilities: [
         'Product Strategy', 'Product Management', 'UI/UX Design', 
         'AI Experience Design', 'Frontend Development', 'Brand Identity', 'System Architecture'
@@ -45,9 +53,9 @@ export default function TeamView({ standalone = false }) {
         'Supabase', 'AI Products', 'Branding', 'Marketing Strategy'
       ],
       socials: {
-        linkedin: 'https://linkedin.com',
-        github: 'https://github.com',
-        portfolio: 'https://portfolio.com',
+        linkedin: 'https://www.linkedin.com/in/karthik-nimmanagoti-52a403324',
+        github: 'https://github.com/NIMMANAGOTI777',
+        instagram: 'https://www.instagram.com/nimmanagoti.karthik/',
         email: 'mailto:karthik@sutra.ai'
       },
       is_featured: true
@@ -329,6 +337,11 @@ export default function TeamView({ standalone = false }) {
                     {founder.socials?.linkedin && (
                       <a href={founder.socials.linkedin} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', borderRadius: '8px', padding: '6px 12px' }}>
                         <LinkedInIcon size={12} /> LinkedIn
+                      </a>
+                    )}
+                    {founder.socials?.instagram && (
+                      <a href={founder.socials.instagram} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', borderRadius: '8px', padding: '6px 12px' }}>
+                        <InstagramIcon size={12} /> Instagram
                       </a>
                     )}
                     {founder.socials?.github && (
