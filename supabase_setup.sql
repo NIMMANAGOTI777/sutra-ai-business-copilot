@@ -199,7 +199,7 @@ select
   'Driving innovation by translating cutting-edge AI research into real-world business value.',
   'https://res.cloudinary.com/do4nuj2kh/image/upload/v1783339293/WhatsApp_Image_2026-07-06_at_5.30.28_PM_zfsz9i.jpg',
   array['AI Research & Innovation', 'Algorithm Design & Tuning', 'NLP & Large Language Models', 'Data Pipeline Architecture', 'Predictive Modeling', 'Performance Optimization', 'System Integration'],
-  array['Python', 'Machine Learning', 'Deep Learning', 'Natural Language Processing', 'Large Language Models (LLMs)', 'Data Analytics', 'API Development', 'TensorFlow / PyTorch'],
+  array['Python', 'C', 'JavaScript', 'SQL', 'HTML5', 'CSS3', 'Bootstrap', 'Responsive Web Design', 'UI Development', 'Cross-Browser Compatibility', 'Computer Networks', 'VLAN Configuration', 'Static Routing', 'DHCP', 'Network Troubleshooting', 'Cisco Packet Tracer', 'Linux', 'Database Design', 'OOP', 'Debugging', 'Git/GitHub', 'ChatGPT', 'Claude AI', 'AI-Assisted Development'],
   '{"linkedin": "https://www.linkedin.com/in/ahladinisindhusriyenumula", "email": "mailto:ahladini@sutra.ai"}'::jsonb,
   false,
   1

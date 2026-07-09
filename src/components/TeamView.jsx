@@ -67,8 +67,10 @@ const fallbackTeam = [
       'Data Pipeline Architecture', 'Predictive Modeling', 'Performance Optimization', 'System Integration'
     ],
     skills: [
-      'Python', 'Machine Learning', 'Deep Learning', 
-      'Natural Language Processing', 'Large Language Models (LLMs)', 'Data Analytics', 'API Development', 'TensorFlow / PyTorch'
+      'Python', 'C', 'JavaScript', 'SQL', 'HTML5', 'CSS3', 'Bootstrap', 'Responsive Web Design', 
+      'UI Development', 'Cross-Browser Compatibility', 'Computer Networks', 'VLAN Configuration', 
+      'Static Routing', 'DHCP', 'Network Troubleshooting', 'Cisco Packet Tracer', 'Linux', 
+      'Database Design', 'OOP', 'Debugging', 'Git/GitHub', 'ChatGPT', 'Claude AI', 'AI-Assisted Development'
     ],
     socials: {
       linkedin: 'https://www.linkedin.com/in/ahladinisindhusriyenumula',
