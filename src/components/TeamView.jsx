@@ -75,6 +75,28 @@ const fallbackTeam = [
       email: 'mailto:ahladini@sutra.ai'
     },
     is_featured: false
+  },
+  {
+    id: 'amrutha-rd',
+    full_name: 'Dornala Amrutha Varshini',
+    role: 'R&D Engineer & Full-Stack Developer',
+    bio: 'Dornala Amrutha Varshini is an R&D Engineer specializing in full-stack web development, backend automation, and database design. She builds responsive frontend architectures and engineers robust workflow automation pipelines utilizing modern tools like Node.js, Python, and n8n.',
+    quote: 'Building intelligent workflows and seamless user experiences to solve real-world challenges.',
+    avatar_url: '/amrutha_avatar.png',
+    responsibilities: [
+      'Frontend Development', 'Workflow Automation & n8n', 'Backend Service Integration', 
+      'Database Schema & Query Tuning', 'System Testing & Optimization'
+    ],
+    skills: [
+      'HTML & CSS', 'Tailwind CSS', 'React', 'Node.js', 
+      'Python', 'MySQL', 'LLMs & Generative AI', 'n8n Workflows'
+    ],
+    socials: {
+      linkedin: 'https://www.linkedin.com/in/amruthadornala30',
+      github: 'https://github.com/amruthadornala30',
+      email: 'mailto:amruthadornala30@gmail.com'
+    },
+    is_featured: false
   }
 ];
 

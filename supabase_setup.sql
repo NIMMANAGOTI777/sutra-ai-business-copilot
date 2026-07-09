@@ -207,3 +207,32 @@ where not exists (
   select 1 from public.team_members where full_name = 'Y Ahladini Sindhu Sri'
 );
 
+-- Seed Team Members Data (Dornala Amrutha Varshini)
+insert into public.team_members (
+  full_name, 
+  role, 
+  bio, 
+  quote, 
+  avatar_url, 
+  responsibilities, 
+  skills, 
+  socials, 
+  is_featured, 
+  display_order
+)
+select 
+  'Dornala Amrutha Varshini',
+  'R&D Engineer & Full-Stack Developer',
+  'Dornala Amrutha Varshini is an R&D Engineer specializing in full-stack web development, backend automation, and database design. She builds responsive frontend architectures and engineers robust workflow automation pipelines utilizing modern tools like Node.js, Python, and n8n.',
+  'Building intelligent workflows and seamless user experiences to solve real-world challenges.',
+  '/amrutha_avatar.png',
+  array['Frontend Development', 'Workflow Automation & n8n', 'Backend Service Integration', 'Database Schema & Query Tuning', 'System Testing & Optimization'],
+  array['HTML & CSS', 'Tailwind CSS', 'React', 'Node.js', 'Python', 'MySQL', 'LLMs & Generative AI', 'n8n Workflows'],
+  '{"linkedin": "https://www.linkedin.com/in/amruthadornala30", "github": "https://github.com/amruthadornala30", "email": "mailto:amruthadornala30@gmail.com"}'::jsonb,
+  false,
+  2
+where not exists (
+  select 1 from public.team_members where full_name = 'Dornala Amrutha Varshini'
+);
+
+
