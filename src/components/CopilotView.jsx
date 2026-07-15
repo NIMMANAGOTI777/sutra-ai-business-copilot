@@ -111,6 +111,54 @@ AI Recommendation: The catering pipeline has ₹22,000 pending. You should confi
           })).sort((a,b) => b.intent - a.intent)
         };
       } 
+      else if (normalized.includes('whatsapp campaign') || normalized.includes('whatsapp broadcast')) {
+        responseObj.text = `Here is today's recommended campaign copy for **WhatsApp Broadcast**:`;
+        responseObj.extraData = {
+          type: 'campaign',
+          data: {
+            subject: 'VIP Customer Appreciation',
+            content: `Hey {{name}}! We appreciate you choosing us. To say thank you, enjoy 20% off your next order this week! Use code VIP20 at checkout. Book now: https://sutra.ai/r/vip`
+          }
+        };
+      }
+      else if (normalized.includes('hot leads') || normalized.includes('show my hot leads') || normalized.includes('show hot leads')) {
+        responseObj.text = `Here are your hottest active leads, filtered by buying intent (>80%):`;
+        responseObj.extraData = {
+          type: 'leads',
+          data: activeBusinessData.customers.filter(c => c.buyingIntent > 80).map(c => ({
+            name: c.name,
+            intent: `${c.buyingIntent}%`,
+            score: c.leadScore,
+            phone: c.phone,
+            summary: c.aiSummary
+          }))
+        };
+      }
+      else if (normalized.includes('unhappy') || normalized.includes('negative') || normalized.includes('unsatisfied') || normalized.includes('unhappy customers')) {
+        const negativeReviews = activeBusinessData.reviews.filter(r => r.rating <= 2);
+        responseObj.text = `Identified ${negativeReviews.length} critical items requiring urgent support:`;
+        responseObj.extraData = {
+          type: 'reviews',
+          data: negativeReviews.map(r => ({
+            name: r.customerName,
+            rating: `${r.rating}/5.0`,
+            content: r.content,
+            id: r.id
+          }))
+        };
+      }
+      else if (normalized.includes('report') || normalized.includes('summary report')) {
+        responseObj.text = `Here is your Daily Business Operations Summary Report:`;
+        responseObj.extraData = {
+          type: 'report',
+          data: [
+            { label: 'CSAT Index', val: activeBusinessData.customerSat || '4.8/5.0' },
+            { label: 'Unresolved DMs', val: `${activeBusinessData.unreadMessages} threads` },
+            { label: 'Est. Revenue Opportunity', val: activeBusinessData.aiSummary?.estimatedRevenue || '₹22,000' },
+            { label: 'Avg Response Time', val: '4.2 mins' }
+          ]
+        };
+      }
       else {
         responseObj.text = `I have analyzed your request: "${queryText}". As your copilot, I recommend checking the Unified Inbox to respond to your ${activeBusinessData.unreadMessages} pending customer threads, or launching a targeted marketing campaign in the Marketing Studio.`;
       }
@@ -203,8 +251,8 @@ AI Recommendation: The catering pipeline has ₹22,000 pending. You should confi
                 {/* Extra Data Rendering (Dynamic cards generated in chat) */}
                 {isCopilot && m.extraData && (
                   <div style={{ marginTop: '4px' }}>
-                    {/* KPI response */}
-                    {m.extraData.type === 'kpi' && (
+                    {/* KPI & Report response */}
+                    {(m.extraData.type === 'kpi' || m.extraData.type === 'report') && (
                       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                         {m.extraData.data.map((item, idx) => (
                           <div key={idx} className="glass-card" style={{ padding: '8px 12px', borderRadius: '10px' }}>
@@ -269,6 +317,28 @@ AI Recommendation: The catering pipeline has ₹22,000 pending. You should confi
                           <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '4px' }}>
                             <span>{idx + 1}. {s.name}</span>
                             <span style={{ color: 'var(--color-purple)', fontWeight: 600 }}>{s.intent}% Probability</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Reviews response */}
+                    {m.extraData.type === 'reviews' && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {m.extraData.data.map((rev, idx) => (
+                          <div key={idx} className="glass-card" style={{ padding: '10px 12px', borderLeft: '3px solid var(--color-rose)', backgroundColor: 'var(--bg-card)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                              <span style={{ fontSize: '0.8125rem', fontWeight: 600 }}>{rev.name}</span>
+                              <span style={{ fontSize: '0.75rem', color: 'var(--color-rose)', fontWeight: 700 }}>★ {rev.rating}</span>
+                            </div>
+                            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: '0 0 8px 0', fontStyle: 'italic' }}>"{rev.content}"</p>
+                            <button 
+                              onClick={() => { setActiveTab('reviews'); }}
+                              className="btn btn-secondary" 
+                              style={{ padding: '4px 8px', fontSize: '0.75rem', borderRadius: '6px' }}
+                            >
+                              Resolve in Reviews Center
+                            </button>
                           </div>
                         ))}
                       </div>

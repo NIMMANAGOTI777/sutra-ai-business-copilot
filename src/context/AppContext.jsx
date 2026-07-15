@@ -78,6 +78,17 @@ export function AppProvider({ children }) {
       }
 
       setProfile(data);
+
+      if (data && data.onboarded) {
+        const { data: wsData, error: wsError } = await supabase
+          .from('workspaces')
+          .select('*')
+          .eq('owner_id', userId)
+          .maybeSingle();
+
+        if (wsError) throw wsError;
+        setWorkspace(wsData);
+      }
     } catch (err) {
       console.error('Error fetching user profile:', err);
     } finally {
@@ -112,6 +123,32 @@ export function AppProvider({ children }) {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Dynamic business data template overlay for Supabase-connected workspaces
+  useEffect(() => {
+    if (workspace) {
+      const customId = 'user-workspace';
+      setBusinessData(prev => {
+        const baseTemplate = prev['cafe'] || prev[Object.keys(prev)[0]];
+        const customBusinessData = {
+          ...baseTemplate,
+          id: customId,
+          name: workspace.business_name || baseTemplate.name,
+          category: workspace.business_category || baseTemplate.category,
+          logo: workspace.business_logo || baseTemplate.logo,
+          hours: workspace.ai_hours || baseTemplate.hours,
+          description: workspace.ai_description || baseTemplate.description,
+          faqs: workspace.ai_faqs || baseTemplate.faqs,
+          pricing: workspace.ai_pricing || baseTemplate.pricing || ''
+        };
+        return {
+          ...prev,
+          [customId]: customBusinessData
+        };
+      });
+      setCurrentBusinessId(customId);
+    }
+  }, [workspace]);
+
   const logout = async () => {
     setProfile(null);
     setWorkspace(null);
@@ -125,39 +162,6 @@ export function AppProvider({ children }) {
     addNotification('Signed out from workspace session', 'system');
   };
 
-  const loginAsDemo = () => {
-    const mockUser = {
-      id: 'demo-user',
-      email: 'demo@sutra.ai',
-      phone: '+919999999999',
-      user_metadata: { name: 'Rahul', full_name: 'Rahul' },
-      app_metadata: { provider: 'demo' }
-    };
-    const mockProfile = {
-      id: 'demo-user',
-      full_name: 'Rahul',
-      email: 'demo@sutra.ai',
-      phone_number: '+919999999999',
-      profile_photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120',
-      login_provider: 'demo',
-      business_name: 'The Daily Grind Cafe',
-      onboarded: true
-    };
-    const mockWorkspace = {
-      id: 'demo-workspace-id',
-      owner_id: 'demo-user',
-      business_name: 'The Daily Grind Cafe',
-      business_category: 'Cafe',
-      setup_completed: true
-    };
-    
-    setUser(mockUser);
-    setProfile(mockProfile);
-    setWorkspace(mockWorkspace);
-    setProfileLoading(false);
-    setIsLandingPage(false);
-    addNotification('Logged in with Demo Account (Sandbox)', 'success');
-  };
 
   // Toggle Theme helper
   const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
@@ -404,8 +408,14 @@ export function AppProvider({ children }) {
     }, 1000);
   };
 
-  const activeBusiness = BUSINESS_PROFILES.find(b => b.id === currentBusinessId) || BUSINESS_PROFILES[0];
-  const activeBusinessData = businessData[currentBusinessId];
+  const activeBusiness = (workspace && currentBusinessId === 'user-workspace') ? {
+    id: 'user-workspace',
+    name: workspace.business_name,
+    owner: profile?.full_name || 'Owner',
+    type: workspace.business_category
+  } : (BUSINESS_PROFILES.find(b => b.id === currentBusinessId) || BUSINESS_PROFILES[0]);
+
+  const activeBusinessData = businessData[currentBusinessId] || businessData['cafe'];
 
   return (
     <AppContext.Provider value={{
@@ -420,7 +430,6 @@ export function AppProvider({ children }) {
       workspace,
       setWorkspace,
       logout,
-      loginAsDemo,
       demoMode,
       setDemoMode,
       currentBusinessId,

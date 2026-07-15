@@ -84,7 +84,7 @@ const fallbackTeam = [
     role: 'R&D Engineer & Full-Stack Developer',
     bio: 'Dornala Amrutha Varshini is an R&D Engineer specializing in full-stack web development, backend automation, and database design. She builds responsive frontend architectures and engineers robust workflow automation pipelines utilizing modern tools like Node.js, Python, and n8n.',
     quote: 'Building intelligent workflows and seamless user experiences to solve real-world challenges.',
-    avatar_url: '/amrutha_avatar.png',
+    avatar_url: '/WhatsApp Image 2026-07-06 at 5.53.01 PM (1).jpeg',
     responsibilities: [
       'Frontend Development', 'Workflow Automation & n8n', 'Backend Service Integration', 
       'Database Schema & Query Tuning', 'System Testing & Optimization'

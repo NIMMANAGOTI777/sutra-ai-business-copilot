@@ -11,7 +11,7 @@ export default function Sidebar() {
   const { 
     currentBusinessId, selectBusiness, activeBusiness, 
     activeTab, setActiveTab, theme, toggleTheme, setIsLandingPage,
-    activeBusinessData, logout
+    activeBusinessData, logout, user, profile
   } = useApp();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -234,16 +234,16 @@ export default function Sidebar() {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
           <img 
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" 
-            alt="Rahul" 
+            src={profile?.profile_photo || user?.user_metadata?.avatar_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120'} 
+            alt={profile?.full_name || 'User'} 
             style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: '1.5px solid var(--color-purple)' }}
           />
           <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
             <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-primary)', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
-              Rahul 👋
+              {profile?.full_name || 'Rahul'} 👋
             </span>
             <span style={{ fontSize: '0.6875rem', color: 'var(--text-secondary)', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
-              rahul@dailygrind.com
+              {profile?.email || user?.email || 'rahul@dailygrind.com'}
             </span>
           </div>
         </div>

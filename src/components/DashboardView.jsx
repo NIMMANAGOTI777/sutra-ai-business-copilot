@@ -8,7 +8,8 @@ import {
 export default function DashboardView() {
   const { 
     activeBusiness, activeBusinessData, setActiveTab, 
-    completeAction, simulateIncomingWebhook, isPipelineActive 
+    completeAction, simulateIncomingWebhook, isPipelineActive,
+    profile
   } = useApp();
 
   const handleActionClick = (action) => {
@@ -38,7 +39,7 @@ export default function DashboardView() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h1 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '0.25rem' }}>
-            Good Morning, Rahul 👋
+            Good Morning, {profile?.full_name || 'Rahul'} 👋
           </h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem' }}>
             Here is the status of <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{activeBusiness.name}</span> today.

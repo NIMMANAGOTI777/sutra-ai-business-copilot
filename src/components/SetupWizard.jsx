@@ -30,6 +30,7 @@ export default function SetupWizard() {
   // Step 3: AI Training State
   const [aiDesc, setAiDesc] = useState('');
   const [aiHours, setAiHours] = useState('9:00 AM - 9:00 PM, Daily');
+  const [aiPricing, setAiPricing] = useState('');
   const [aiFaqs, setAiFaqs] = useState('');
 
   const toggleChannel = (key) => {
@@ -57,8 +58,11 @@ export default function SetupWizard() {
         .update({
           business_logo: logoUrl || null,
           connected_channels: channels,
+          catalog: catalog,
+          services: services,
           ai_description: aiDesc,
           ai_hours: aiHours,
+          ai_pricing: aiPricing,
           ai_faqs: aiFaqs,
           setup_completed: true
         })
@@ -335,6 +339,19 @@ export default function SetupWizard() {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Pricing & Package Guidelines *</label>
+                  <textarea
+                    required
+                    placeholder="e.g. Coffee starting at ₹120, Sandwich combos from ₹250. 10% discount on orders above ₹1,000..."
+                    rows={2}
+                    value={aiPricing}
+                    onChange={(e) => setAiPricing(e.target.value)}
+                    className="form-input"
+                    style={{ borderRadius: '8px', resize: 'none', lineHeight: '1.4' }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                   <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Frequently Asked Questions (optional)</label>
                   <textarea
                     placeholder="Q: Do you offer corporate menu options? A: Yes, starting from ₹380 per plate..."
@@ -351,7 +368,7 @@ export default function SetupWizard() {
                 <button onClick={handlePrevStep} className="btn btn-secondary" style={{ flex: 1, borderRadius: '10px' }}>Back</button>
                 <button
                   onClick={handleCompleteSetup}
-                  disabled={loading || !aiDesc.trim()}
+                  disabled={loading || !aiDesc.trim() || !aiPricing.trim()}
                   className="btn btn-primary"
                   style={{ flex: 2, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                 >

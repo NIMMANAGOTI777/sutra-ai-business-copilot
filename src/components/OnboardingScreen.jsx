@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabaseClient';
 import { Sparkles, Building, Phone, Mail, MapPin, Users, HelpCircle, ShieldAlert, RefreshCw } from 'lucide-react';
 
 export default function OnboardingScreen() {
-  const { user, setProfile, addNotification } = useApp();
+  const { user, setProfile, setWorkspace, addNotification } = useApp();
 
   const [businessName, setBusinessName] = useState('');
   const [category, setCategory] = useState('Cafe');
@@ -47,7 +47,28 @@ export default function OnboardingScreen() {
 
       if (error) throw error;
 
+      // Create a corresponding workspace in the database
+      const { data: wsData, error: wsError } = await supabase
+        .from('workspaces')
+        .insert({
+          owner_id: user.id,
+          business_name: businessName,
+          business_category: category,
+          business_logo: logoUrl || null,
+          business_phone: businessPhone,
+          business_email: businessEmail,
+          business_address: address,
+          employees_count: employees,
+          connected_channels: {},
+          setup_completed: false
+        })
+        .select('*')
+        .single();
+
+      if (wsError) throw wsError;
+
       setProfile(data);
+      setWorkspace(wsData);
       addNotification('Business registration setup completed!', 'success');
     } catch (err) {
       setErrorMsg(err.message || 'Failed to submit onboarding credentials to database.');
